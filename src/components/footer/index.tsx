@@ -1,13 +1,13 @@
 import { Film, Github, Twitter, Instagram, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { NavItem } from "../navbar/nav-item";
 
 export function Footer() {
   return (
     <footer className="bg-muted/20 border-t border-border">
       <div className="container mx-auto px-4 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Brand */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
               <Film className="h-8 w-8 text-primary" />
@@ -32,71 +32,27 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Navigation */}
           <div className="space-y-4">
             <h3 className="font-semibold text-foreground">Navegação</h3>
             <ul className="space-y-2 text-muted-foreground">
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Filmes
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Séries
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Top Reviews
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Críticos
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Lançamentos
-                </a>
-              </li>
+              <NavItem href="#" text="Filmes" />
+              <NavItem href="#" text="Séries" />
+              <NavItem href="#" text="Top Reviews" />
+              <NavItem href="#" text="Críticos" />
+              <NavItem href="#" text="Lançamentos" />
             </ul>
           </div>
 
-          {/* Categories */}
           <div className="space-y-4">
             <h3 className="font-semibold text-foreground">Gêneros</h3>
             <ul className="space-y-2 text-muted-foreground">
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Ação
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Drama
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Comédia
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Ficção Científica
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Terror
-                </a>
-              </li>
+              <NavItem href="#" text="Drama" />
+              <NavItem href="#" text="Comédia" />
+              <NavItem href="#" text="Ficção Científica" />
+              <NavItem href="#" text="Ação" />
             </ul>
           </div>
 
-          {/* Newsletter */}
           <div className="space-y-4">
             <h3 className="font-semibold text-foreground">Newsletter</h3>
             <p className="text-muted-foreground text-sm">
@@ -120,24 +76,9 @@ export function Footer() {
             © 2024 CineReview. Todos os direitos reservados.
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
-            <a
-              href="#"
-              className="text-muted-foreground hover:text-primary text-sm transition-colors"
-            >
-              Política de Privacidade
-            </a>
-            <a
-              href="#"
-              className="text-muted-foreground hover:text-primary text-sm transition-colors"
-            >
-              Termos de Uso
-            </a>
-            <a
-              href="#"
-              className="text-muted-foreground hover:text-primary text-sm transition-colors"
-            >
-              Contato
-            </a>
+            <NavItem href="#" text="Termos de Uso" />
+            <NavItem href="#" text="Política de Privacidade" />
+            <NavItem href="#" text="Contato" />
           </div>
         </div>
       </div>
