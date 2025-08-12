@@ -1,0 +1,130 @@
+{
+  "movies": [
+    {
+      "id": 1,
+      "title": "Oppenheimer",
+      "rating": 9.2,
+      "year": 2023,
+      "duration": "3h 0m",
+      "genre": "Drama",
+      "poster": "https://images.unsplash.com/photo-1489599162565-3d4a6454b53b?w=400&h=600&fit=crop",
+      "description": "A biografia épica do físico J. Robert Oppenheimer e seu papel no desenvolvimento da bomba atômica.",
+      "isPopular": true,
+      "category": "popular"
+    },
+    {
+      "id": 2,
+      "title": "Dune: Parte Dois",
+      "rating": 8.8,
+      "year": 2024,
+      "duration": "2h 46m",
+      "genre": "Ficção Científica",
+      "poster": "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=400&h=600&fit=crop",
+      "description": "Paul Atreides une-se com Chani e os Fremen enquanto busca vingança contra os conspiradores.",
+      "isPopular": true,
+      "category": "popular"
+    },
+    {
+      "id": 3,
+      "title": "The Batman",
+      "rating": 8.5,
+      "year": 2022,
+      "duration": "2h 56m",
+      "genre": "Ação",
+      "poster": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=600&fit=crop",
+      "description": "Batman investiga uma série de assassinatos brutais em Gotham City.",
+      "isPopular": true,
+      "category": "popular"
+    },
+    {
+      "id": 4,
+      "title": "Top Gun: Maverick",
+      "rating": 8.7,
+      "year": 2022,
+      "duration": "2h 11m",
+      "genre": "Ação",
+      "poster": "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=400&h=600&fit=crop",
+      "description": "Maverick treina uma nova geração de pilotos para uma missão perigosa.",
+      "isPopular": true,
+      "category": "popular"
+    },
+    {
+      "id": 5,
+      "title": "Everything Everywhere",
+      "rating": 8.9,
+      "year": 2022,
+      "duration": "2h 19m",
+      "genre": "Comédia",
+      "poster": "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=400&h=600&fit=crop",
+      "description": "Uma mulher explora realidades alternativas para salvar o multiverso.",
+      "isPopular": true,
+      "category": "popular"
+    },
+    {
+      "id": 6,
+      "title": "Killers of the Flower Moon",
+      "rating": 8.3,
+      "year": 2023,
+      "duration": "3h 26m",
+      "genre": "Drama",
+      "poster": "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400&h=600&fit=crop",
+      "description": "Investigação dos assassinatos da tribo Osage na década de 1920.",
+      "category": "new"
+    },
+    {
+      "id": 7,
+      "title": "The Marvels",
+      "rating": 7.2,
+      "year": 2023,
+      "duration": "1h 45m",
+      "genre": "Super-herói",
+      "poster": "https://images.unsplash.com/photo-1635805737707-575885ab0820?w=400&h=600&fit=crop",
+      "description": "Carol Danvers, Kamala Khan e Monica Rambeau unem forças.",
+      "category": "new"
+    },
+    {
+      "id": 8,
+      "title": "Napoleon",
+      "rating": 7.8,
+      "year": 2023,
+      "duration": "2h 38m",
+      "genre": "Drama",
+      "poster": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=600&fit=crop",
+      "description": "A ascensão e queda do imperador francês Napoleão Bonaparte.",
+      "category": "new"
+    },
+    {
+      "id": 9,
+      "title": "The Hunger Games",
+      "rating": 8.1,
+      "year": 2023,
+      "duration": "2h 30m",
+      "genre": "Ação",
+      "poster": "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=400&h=600&fit=crop",
+      "description": "A origem da história de Coriolanus Snow como mentor.",
+      "category": "new"
+    },
+    {
+      "id": 10,
+      "title": "Spider-Man: Across",
+      "rating": 9.1,
+      "year": 2023,
+      "duration": "2h 20m",
+      "genre": "Animação",
+      "poster": "https://images.unsplash.com/photo-1635805737707-575885ab0820?w=400&h=600&fit=crop",
+      "description": "Miles Morales catapulta através do multiverso dos Spider-People.",
+      "category": "new"
+    }
+  ],
+
+  "reviews": [
+    {
+      "id": 1,
+      "movieId": 1,
+      "userId": 1,
+      "rating": 5,
+      "comment": "Excelente filme! Atuações incríveis.",
+      "createdAt": "2023-11-15T10:30:00Z"
+    }
+  ]
+}
