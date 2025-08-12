@@ -10,7 +10,7 @@ interface UserMenuProps {
 
 export function UserMenu({ user, onSignOut }: UserMenuProps) {
   return (
-    <nav className="hidden md:flex items-center space-x-4">
+    <nav className="flex items-center gap-4">
       {user ? (
         <>
           <NavItem
@@ -21,7 +21,8 @@ export function UserMenu({ user, onSignOut }: UserMenuProps) {
 
           <Button
             onClick={onSignOut}
-            className="flex items-center space-x-2 px-3 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-gray-800 transition-all"
+            className="flex items-center gap-2"
+            variant={"destructive"}
           >
             <LogOut className="h-5 w-5" />
             <span>Sair</span>
