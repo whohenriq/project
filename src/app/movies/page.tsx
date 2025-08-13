@@ -7,8 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Movie } from "@/types/movie";
 import { mockMovies } from "@/mocks/mockMovies";
 import { supabase } from "@/lib/supabaseClient";
-import { ProtectedRoute } from "@/components/protected-route";
-
 
 export default function MoviesListPage() {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -54,7 +52,6 @@ export default function MoviesListPage() {
   );
 
   return (
-    <ProtectedRoute>
         <div className="max-w-7xl mx-auto p-6">
         <div className="flex items-center justify-between mb-6">
             <h1 className="text-3xl font-bold">Filmes</h1>
@@ -90,6 +87,5 @@ export default function MoviesListPage() {
             )}
             </div>
         </div>
-    </ProtectedRoute>
   );
 }

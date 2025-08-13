@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { MovieCard } from "@/components/movie-card";
 import { Movie } from "@/types/movie";
-import { ProtectedRoute } from "@/components/protected-route";
 import { getMyReviews } from "@/services/reviewsService";
 
 export default function MyReviewsPage() {
@@ -29,7 +28,6 @@ export default function MyReviewsPage() {
   );
 
   return (
-    <ProtectedRoute nonAdminOnly>
       <div className="max-w-7xl mx-auto p-6">
         <h1 className="text-3xl font-bold mb-6">Meus Reviews</h1>
 
@@ -58,6 +56,5 @@ export default function MyReviewsPage() {
           )}
         </div>
       </div>
-    </ProtectedRoute>
   );
 }

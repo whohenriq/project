@@ -12,7 +12,6 @@ import { getMovieById } from "@/services/moviesService";
 import { mockMovies } from "@/mocks/mockMovies";
 import { mockReviews } from "@/mocks/mockReviews"; 
 import { useParams } from "next/navigation";
-import { ProtectedRoute } from "@/components/protected-route";
 
 export default function MovieDetailPage() {
   const params = useParams();
@@ -73,7 +72,7 @@ export default function MovieDetailPage() {
         comment,
       });
 
-      setMyReview(newReview); // salva a sua review
+      setMyReview(newReview);
       setReviews(reviews.filter(r => r.userId !== "currentUserId"));
       setRating(0);
       setComment("");
@@ -90,7 +89,6 @@ export default function MovieDetailPage() {
     reviews.reduce((acc, r) => acc + r.rating, 0) / (reviews.length || 1);
 
   return (
-    <ProtectedRoute>
       <div className="max-w-5xl mx-auto p-6 space-y-10">
       
         <div className="flex flex-col md:flex-row gap-6">
@@ -165,6 +163,5 @@ export default function MovieDetailPage() {
           )}
         </div>
       </div>
-    </ProtectedRoute>
   );
 }

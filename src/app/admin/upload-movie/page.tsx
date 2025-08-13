@@ -9,7 +9,6 @@ import { uploadMovie } from "@/services/moviesService";
 import { UploadMovieData } from "@/types/movie";
 import { FileInput } from "@/components/ui/file-input";
 import { Textarea } from "@/components/ui/text-area";
-import { ProtectedRoute } from "@/components/protected-route";
 
 const genresList = [
   "Ação",
@@ -56,7 +55,6 @@ export default function UploadMoviePage() {
   }
 
   return (
-    <ProtectedRoute adminOnly>
     <div className="max-w-4xl mx-auto p-6 space-y-6">
       <h1 className="text-3xl font-bold mb-6">Cadastrar Filme</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -135,6 +133,5 @@ export default function UploadMoviePage() {
         <Button type="submit" className="mt-4 px-6 py-3">Salvar Filme</Button>
       </form>
     </div>
-  </ProtectedRoute>
   );
 }
