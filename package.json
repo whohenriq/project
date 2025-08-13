@@ -7,9 +7,10 @@
     "build": "next build",
     "start": "next start",
     "server": "json-server --watch db.json --port 3001"
-    
   },
   "dependencies": {
+    "@animxyz/core": "^0.6.6",
+    "@animxyz/react": "^0.6.7",
     "@radix-ui/react-slot": "^1.2.3",
     "@supabase/supabase-js": "^2.55.0",
     "class-variance-authority": "^0.7.1",
@@ -19,6 +20,7 @@
     "next": "15.4.6",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "react-hook-form": "^7.62.0",
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {

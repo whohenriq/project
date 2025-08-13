@@ -9,7 +9,7 @@ import {
   useCallback,
 } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import { User } from "@/types/uset";
+import { User } from "@/types/user";
 
 interface AuthContextType {
   user: User | null;

@@ -1,6 +1,6 @@
 import { UserIcon, LogOut } from "lucide-react";
 import { Button } from "../ui/button";
-import { User } from "@/types/uset";
+import { User } from "@/types/user";
 import { NavItem } from "./nav-item";
 
 interface UserMenuProps {
