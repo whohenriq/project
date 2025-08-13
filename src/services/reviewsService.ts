@@ -1,7 +1,8 @@
 import { supabase } from "@/lib/supabaseClient";
+import { Movie } from "@/types/movie";
 import { Review } from "@/types/review";
 
-// Inserir review
+
 export async function addReview(review: Omit<Review, "id" | "createdAt">) {
   const { data, error } = await supabase
     .from("reviews")
@@ -13,7 +14,6 @@ export async function addReview(review: Omit<Review, "id" | "createdAt">) {
   return data as Review;
 }
 
-// Buscar reviews de um filme
 export async function getReviewsByMovie(movieId: string) {
   const { data, error } = await supabase
     .from("reviews")
@@ -48,4 +48,38 @@ export async function updateMovieRating(movieId: string) {
   if (updateError) throw updateError;
 
   return { votesCount, averageRating };
+}
+
+export async function getMyReviews(userId: string) {
+  const { data, error } = await supabase
+    .from("reviews")
+    .select(`
+      rating,
+      comment,
+      created_at,
+      movie:movies (
+        id,
+        title,
+        description,
+        genre,
+        poster_url,
+        trailer_url
+      )
+    `)
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+
+  return (data || []).map((r: any) => ({
+    id: r.movie.id,
+    title: r.movie.title,
+    description: r.movie.description,
+    genre: Array.isArray(r.movie.genre) ? r.movie.genre : [r.movie.genre || ""],
+    posterUrl: r.movie.poster_url,
+    trailerUrl: r.movie.trailer_url,
+    averageRating: r.rating,
+    comment: r.comment,
+    createdAt: r.created_at,
+  })) as (Movie & { comment: string; createdAt: string })[];
 }

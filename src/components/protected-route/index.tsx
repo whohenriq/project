@@ -6,10 +6,11 @@ import { supabase } from "@/lib/supabaseClient";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
-  adminOnly?: boolean; 
+  adminOnly?: boolean;
+  nonAdminOnly?: boolean;     
 }
 
-export function ProtectedRoute({ children, adminOnly = false }: ProtectedRouteProps) {
+export function ProtectedRoute({ children, adminOnly = false, nonAdminOnly = false }: ProtectedRouteProps) {
   const [loading, setLoading] = useState(true);
   const [authenticated, setAuthenticated] = useState(false);
   const router = useRouter();
@@ -23,18 +24,22 @@ export function ProtectedRoute({ children, adminOnly = false }: ProtectedRoutePr
         return;
       }
 
-      if (adminOnly) {
-        // verifica se o usuário é admin
+      if (adminOnly || nonAdminOnly) {
         const { data: profile } = await supabase
           .from("users")
           .select("is_admin")
           .eq("id", user.id)
           .single();
 
-        if (!profile?.is_admin) {
-          router.push("/"); 
-          return;
-        }
+        // if (adminOnly && !profile?.is_admin) {
+        //   router.push("/"); // redireciona se não for admin
+        //   return;
+        // }
+
+        // if (nonAdminOnly && profile?.is_admin) {
+        //   router.push("/"); // redireciona se for admin
+        //   return;
+        // }
       }
 
       setAuthenticated(true);
@@ -42,7 +47,7 @@ export function ProtectedRoute({ children, adminOnly = false }: ProtectedRoutePr
     }
 
     checkUser();
-  }, [router, adminOnly]);
+  }, [router, adminOnly, nonAdminOnly]);
 
   if (loading) return <p>Carregando...</p>;
   if (!authenticated) return null;

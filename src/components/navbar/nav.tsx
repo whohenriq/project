@@ -1,4 +1,4 @@
-import { Home, TrendingUp } from "lucide-react";
+import { Home, Star, Film } from "lucide-react";
 import { NavItem } from "./nav-item";
 
 export function Nav() {
@@ -7,10 +7,16 @@ export function Nav() {
       <NavItem href="/" text="Início" icon={<Home className="h-4 w-4" />} />
 
       <NavItem
-        href="/"
-        text="Em Alta"
-        icon={<TrendingUp className="h-4 w-4" />}
-      />
+          href="/movies"
+          text="Filmes"
+          icon={<Film className="h-4 w-4" />}
+        />
+
+      <NavItem
+          href="/reviews"
+          text="Meus Reviews"
+          icon={<Star className="h-4 w-4" />}
+        />
     </nav>
   );
 }

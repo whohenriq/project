@@ -44,8 +44,8 @@ export function Footer() {
           </div>
 
           <div className="space-y-4">
-            <h3 className="font-semibold text-foreground">Gêneros</h3>
-            <ul className="space-y-2 text-muted-foreground">
+            <h3 className="font-semibold text-muted-foreground">Gêneros</h3>
+            <ul className="space-y-2 text-foreground">
               <NavItem href="#" text="Drama" />
               <NavItem href="#" text="Comédia" />
               <NavItem href="#" text="Ficção Científica" />
@@ -73,7 +73,7 @@ export function Footer() {
 
         <div className="border-t border-border mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-muted-foreground text-sm">
-            © 2024 CineReview. Todos os direitos reservados.
+            © 2025 CineReview. Todos os direitos reservados.
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <NavItem href="#" text="Termos de Uso" />
