@@ -2,7 +2,6 @@ import { supabase } from "@/lib/supabaseClient";
 import { Movie } from "@/types/movie";
 import { Review } from "@/types/review";
 
-
 export async function addReview(review: Omit<Review, "id" | "createdAt">) {
   const { data, error } = await supabase
     .from("reviews")
@@ -53,7 +52,8 @@ export async function updateMovieRating(movieId: string) {
 export async function getMyReviews(userId: string) {
   const { data, error } = await supabase
     .from("reviews")
-    .select(`
+    .select(
+      `
       rating,
       comment,
       created_at,
@@ -65,7 +65,8 @@ export async function getMyReviews(userId: string) {
         poster_url,
         trailer_url
       )
-    `)
+    `
+    )
     .eq("user_id", userId)
     .order("created_at", { ascending: false });
 

@@ -3,4 +3,5 @@ export interface User {
   email: string;
   username: string;
   avatar?: string;
+  provider?: string;
 }

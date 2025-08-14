@@ -10,10 +10,12 @@ import {
 } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { User } from "@/types/user";
+import { useRouter } from "next/navigation";
 
 interface AuthContextType {
   user: User | null;
   isLoading: boolean;
+  isAdmin: boolean;
   signInWithEmail: () => Promise<void>;
   signOut: () => Promise<void>;
   signInWithGoogle: () => Promise<void>;
@@ -30,12 +32,14 @@ function mapSupabaseUser(supabaseUser: any): User {
       supabaseUser.email?.split("@")[0] ||
       "unknown",
     avatar: supabaseUser.user_metadata?.avatar_url || undefined,
+    provider: supabaseUser.app_metadata?.provider || "",
   };
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -69,11 +73,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signInWithEmail = useCallback(async () => {
+    setIsLoading(true);
     const { data, error } = await supabase.auth.signInWithPassword({
       email: "valid.email@supabase.io",
       password: "example-password",
     });
-  }, []);
+
+    if (error) {
+      setIsLoading(false);
+      throw error;
+    }
+
+    if (data.user) {
+      setUser(mapSupabaseUser(data.user));
+
+      if (data.user.app_metadata?.provider === "email") {
+        router.push("/");
+      } else {
+        router.push("/unauthorized");
+      }
+    }
+    setIsLoading(false);
+  }, [router]);
 
   const signOut = useCallback(async () => {
     setIsLoading(true);
@@ -90,13 +111,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         redirectTo: `${window.location.origin}`,
       },
     });
-    if (error) throw error;
+
+    if (error) {
+      setIsLoading(false);
+      throw error;
+    }
+
     setIsLoading(false);
   }, []);
 
   return (
     <AuthContext.Provider
-      value={{ user, signOut, isLoading, signInWithEmail, signInWithGoogle }}
+      value={{
+        user,
+        signOut,
+        isAdmin: user?.provider === "email",
+        isLoading,
+        signInWithEmail,
+        signInWithGoogle,
+      }}
     >
       {children}
     </AuthContext.Provider>

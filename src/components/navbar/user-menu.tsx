@@ -28,7 +28,9 @@ export function UserMenu({ user, onSignOut }: UserMenuProps) {
             <span>Sair</span>
           </Button>
         </>
-      ) : null}
+      ) : (
+        <NavItem href="/login" text="Entrar" />
+      )}
     </nav>
   );
 }

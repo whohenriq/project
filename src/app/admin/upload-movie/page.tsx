@@ -23,8 +23,15 @@ const genresList = [
 
 export default function UploadMoviePage() {
   const router = useRouter();
-  const { register, handleSubmit, reset, formState: { errors }, setValue, watch } = useForm<UploadMovieData & { genre: string[] }>();
-  
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+    setValue,
+  } = useForm<UploadMovieData & { genre: string[] }>();
+
   const [posterPreview, setPosterPreview] = useState<string | null>(null);
   const [trailerPreview, setTrailerPreview] = useState<string | null>(null);
 
@@ -58,13 +65,14 @@ export default function UploadMoviePage() {
     <div className="max-w-4xl mx-auto p-6 space-y-6">
       <h1 className="text-3xl font-bold mb-6">Cadastrar Filme</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        
         <div>
           <label className="block font-semibold mb-1">Título</label>
           <Input {...register("title", { required: "Título obrigatório" })} />
-          {errors.title && <p className="text-red-600">{errors.title.message}</p>}
+          {errors.title && (
+            <p className="text-red-600">{errors.title.message}</p>
+          )}
         </div>
-     
+
         <div>
           <label className="block font-semibold mb-1">Ano</label>
           <Input
@@ -87,38 +95,51 @@ export default function UploadMoviePage() {
             className="w-full border rounded-md p-2 h-28"
           >
             {genresList.map((g) => (
-              <option key={g} value={g}>{g}</option>
+              <option key={g} value={g}>
+                {g}
+              </option>
             ))}
           </select>
-          {errors.genre && <p className="text-red-600">{errors.genre.message}</p>}
+          {errors.genre && (
+            <p className="text-red-600">{errors.genre.message}</p>
+          )}
         </div>
 
         <div className="space-y-2">
-        <label className="block font-semibold mb-1">Duração</label>
-        <Input
+          <label className="block font-semibold mb-1">Duração</label>
+          <Input
             {...register("duration", { required: "Duração obrigatória" })}
             type="text"
             placeholder="Ex: 2h 15m"
-        />
-        {errors.duration && <p className="text-red-600">{errors.duration.message}</p>}
+          />
+          {errors.duration && (
+            <p className="text-red-600">{errors.duration.message}</p>
+          )}
         </div>
 
         <div className="space-y-2">
-        <label className="block font-semibold mb-1">Descrição</label>
-        <Textarea
+          <label className="block font-semibold mb-1">Descrição</label>
+          <Textarea
             {...register("description", { required: "Descrição obrigatória" })}
             rows={5}
-        />
-        {errors.description && <p className="text-red-600">{errors.description.message}</p>}
+          />
+          {errors.description && (
+            <p className="text-red-600">{errors.description.message}</p>
+          )}
         </div>
 
- 
         <FileInput
           label="Poster (imagem)"
           accept="image/*"
           onFileSelect={handlePosterSelect}
         />
-        {posterPreview && <img src={posterPreview} alt="Preview do poster" className="mt-2 w-48 rounded-lg" />}
+        {posterPreview && (
+          <img
+            src={posterPreview}
+            alt="Preview do poster"
+            className="mt-2 w-48 rounded-lg"
+          />
+        )}
 
         <FileInput
           label="Trailer (vídeo)"
@@ -127,10 +148,16 @@ export default function UploadMoviePage() {
         />
 
         {trailerPreview && (
-          <video src={trailerPreview} controls className="mt-2 w-full max-w-lg rounded-lg" />
+          <video
+            src={trailerPreview}
+            controls
+            className="mt-2 w-full max-w-lg rounded-lg"
+          />
         )}
 
-        <Button type="submit" className="mt-4 px-6 py-3">Salvar Filme</Button>
+        <Button type="submit" className="mt-4 px-6 py-3">
+          Salvar Filme
+        </Button>
       </form>
     </div>
   );
