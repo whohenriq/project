@@ -1,50 +1,33 @@
-import { supabase } from "@/lib/supabaseClient";
 import { UploadMovieData, Movie } from "@/types/movie";
 
-export async function getMovieById(id: string) {
-  const { data, error } = await supabase
-    .from("movies")
-    .select("*")
-    .eq("id", id)
-    .single();
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-  if (error) throw error;
-  return data as Movie;
+export async function getMovieById(id: number) {
+  const res = await fetch(`${API_URL}/movies/${id}`);
+  if (!res.ok) throw new Error("Erro ao buscar filme");
+  return res.json() as Promise<Movie>;
 }
 
 export async function uploadMovie(data: UploadMovieData) {
-  // upload poster
-  const posterPath = `posters/${Date.now()}_${data.posterFile.name}`;
-  const { error: posterError } = await supabase.storage
-    .from("movie-posters")
-    .upload(posterPath, data.posterFile, { cacheControl: "3600", upsert: false });
-  if (posterError) throw posterError;
-
-  // upload trailer
-  const trailerPath = `trailers/${Date.now()}_${data.trailerFile.name}`;
-  const { error: trailerError } = await supabase.storage
-    .from("movie-trailers")
-    .upload(trailerPath, data.trailerFile, { cacheControl: "3600", upsert: false });
-  if (trailerError) throw trailerError;
-
-  // public URLs
-  const { data: posterPublicUrlData } = supabase.storage
-    .from("movie-posters")
-    .getPublicUrl(posterPath);
-  const { data: trailerPublicUrlData } = supabase.storage
-    .from("movie-trailers")
-    .getPublicUrl(trailerPath);
-
-  // insert
-  const { error: insertError } = await supabase.from("movies").insert({
+  const newMovie: Movie = {
+    id: Date.now(), 
     title: data.title,
     year: data.year,
-    genre: data.genre,
+    genre: data.genre, 
     description: data.description,
-    poster_url: posterPublicUrlData.publicUrl,
-    trailer_url: trailerPublicUrlData.publicUrl,
-  });
-  if (insertError) throw insertError;
+    duration: data.duration,
+    poster: data.poster,
+    trailer: data.trailer,
+    rating: 0,
+    reviewsCount: 0,
+  };
 
-  return true;
+  const res = await fetch(`${API_URL}/movies`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(newMovie),
+  });
+
+  if (!res.ok) throw new Error("Erro ao criar filme");
+  return res.json(); 
 }

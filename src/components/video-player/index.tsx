@@ -6,8 +6,10 @@ interface VideoPlayerProps {
   src: string;
   poster?: string;
   className?: string;
+  height?: string;
 }
-export function VideoPlayer({ src, poster }: VideoPlayerProps) {
+
+export function VideoPlayer({ src, poster, className, height }: VideoPlayerProps) {
   const ref = useRef<HTMLVideoElement | null>(null);
   const [playing, setPlaying] = useState(false);
 
@@ -25,7 +27,13 @@ export function VideoPlayer({ src, poster }: VideoPlayerProps) {
 
   return (
     <div className="space-y-2">
-      <video ref={ref} src={src} poster={poster} controls className="w-full rounded-xl" />
+      <video
+        ref={ref}
+        src={src}
+        poster={poster}
+        controls
+        className={`w-full rounded-xl ${height || ""}`}
+      />
       <div className="flex gap-2">
         <Button onClick={toggle}>{playing ? "Pausar" : "Reproduzir"}</Button>
       </div>
