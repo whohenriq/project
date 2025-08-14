@@ -25,7 +25,7 @@ export function Nav() {
 
       {isAdmin && (
         <NavItem
-          href="/upload-movie"
+          href="/admin/upload-movie"
           text="Upload Filme"
           icon={<Upload className="h-4 w-4" />}
         />

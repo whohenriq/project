@@ -5,29 +5,23 @@ import { useState, useEffect } from "react";
 import { MovieCard } from "@/components/movie-card";
 import { Button } from "@/components/ui/button";
 import { Movie } from "@/types/movie";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import { getMovies } from "@/services/moviesService";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function MoviesListPage() {
+  const { user, isAdmin, isLoading } = useAuth();
   const [movies, setMovies] = useState<Movie[]>([]);
   const [search, setSearch] = useState("");
-  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     async function loadMovies() {
       try {
-        const res = await fetch(`${API_URL}/movies`);
-        if (!res.ok) throw new Error("Erro ao buscar filmes");
-        const data: Movie[] = await res.json();
-
-
+        const data = await getMovies();
         const moviesFromAPI = data.map((m) => ({
           ...m,
           genre: Array.isArray(m.genre) ? m.genre : [m.genre || ""],
         }));
-
         setMovies(moviesFromAPI);
-        setIsAdmin(true);
       } catch (err) {
         console.error("Erro ao carregar filmes:", err);
       }
@@ -35,6 +29,8 @@ export default function MoviesListPage() {
 
     loadMovies();
   }, []);
+
+  if (isLoading) return <p>Carregando...</p>;
 
   const filteredMovies = movies.filter((m) =>
     m.title.toLowerCase().includes(search.toLowerCase())

@@ -16,14 +16,14 @@ export default function MovieDetailPage() {
   const params = useParams();
   const movieId = Number(params.movieId);
 
-  const { user } = useAuth(); 
+
 
   const [movie, setMovie] = useState<Movie | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [myReview, setMyReview] = useState<Review | null>(null);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const { user, isAdmin } = useAuth();
 
   if (!movieId) return <p>Filme não encontrado</p>;
 

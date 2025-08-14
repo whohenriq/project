@@ -2,6 +2,12 @@ import { UploadMovieData, Movie } from "@/types/movie";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+export async function getMovies(): Promise<Movie[]> {
+  const res = await fetch(`${API_URL}/movies`);
+  if (!res.ok) throw new Error("Erro ao buscar filmes");
+  return res.json();
+}
+
 export async function getMovieById(id: number) {
   const res = await fetch(`${API_URL}/movies/${id}`);
   if (!res.ok) throw new Error("Erro ao buscar filme");
