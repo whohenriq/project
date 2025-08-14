@@ -9,15 +9,18 @@ import { useRouter } from "next/navigation";
 import { uploadMovie } from "@/services/moviesService";
 import { UploadMovieData } from "@/types/movie";
 import { FileInput } from "@/components/ui/file-input";
+import { useAuth } from "@/hooks/useAuth";
 
 const genresList = ["Ação","Aventura","Comedia","Drama","Horror","Sci-Fi","Thriller","Romance"];
 
 export default function UploadMoviePage() {
   const router = useRouter();
   const { register, handleSubmit, reset, formState: { errors }, setValue } = useForm<UploadMovieData & { genre: string[] }>();
+  const { user } = useAuth();
 
   const [posterPreview, setPosterPreview] = useState<string | null>(null);
   const [trailerPreview, setTrailerPreview] = useState<string | null>(null);
+
 
   const handlePosterSelect = async (file: File) => {
     const base64 = await fileToBase64(file);

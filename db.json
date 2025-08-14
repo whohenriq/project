@@ -3,7 +3,7 @@
     {
       "id": "1",
       "title": "Oppenheimer",
-      "rating": 9.2,
+      "rating": 4,
       "year": 2023,
       "duration": "3h 0m",
       "genre": "Drama",
@@ -11,7 +11,8 @@
       "description": "A biografia épica do físico J. Robert Oppenheimer e seu papel no desenvolvimento da bomba atômica.",
       "isPopular": true,
       "category": "popular",
-      "trailer": "https://www.w3schools.com/html/movie.mp4"
+      "trailer": "https://www.w3schools.com/html/movie.mp4",
+      "votes_count": 2
     },
     {
       "id": "2",
@@ -146,7 +147,7 @@
       "id": "c627",
       "movieId": 7,
       "userId": 1,
-      "username": "Você",
+      "username": "User test",
       "rating": 4,
       "comment": "sdss",
       "createdAt": "2025-08-14T14:16:59.416Z"
@@ -155,10 +156,19 @@
       "id": "7564",
       "movieId": 4,
       "userId": 1,
-      "username": "Você",
+      "username": "User test",
       "rating": 4,
       "comment": "mkmmm",
       "createdAt": "2025-08-14T14:17:21.084Z"
+    },
+    {
+      "id": "6dda",
+      "movieId": 1,
+      "userId": null,
+      "username": "Valéria Vitória",
+      "rating": 3,
+      "comment": "otimo filme",
+      "createdAt": "2025-08-14T15:14:42.602Z"
     }
   ]
 }

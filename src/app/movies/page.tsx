@@ -20,7 +20,7 @@ export default function MoviesListPage() {
         if (!res.ok) throw new Error("Erro ao buscar filmes");
         const data: Movie[] = await res.json();
 
-        // Ajuste do genre caso venha como string
+
         const moviesFromAPI = data.map((m) => ({
           ...m,
           genre: Array.isArray(m.genre) ? m.genre : [m.genre || ""],

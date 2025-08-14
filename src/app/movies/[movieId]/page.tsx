@@ -10,10 +10,13 @@ import { Review } from "@/types/review";
 import { getReviewsByMovie, addReview, updateMovieRating } from "@/services/reviewsService";
 import { getMovieById } from "@/services/moviesService";
 import { useParams } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function MovieDetailPage() {
   const params = useParams();
   const movieId = Number(params.movieId);
+
+  const { user } = useAuth(); 
 
   const [movie, setMovie] = useState<Movie | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -37,8 +40,9 @@ export default function MovieDetailPage() {
     async function loadReviews() {
       try {
         const data = await getReviewsByMovie(movieId);
-        const myRev = data.find(r => r.userId === 1) || null; // Simula usuário atual
-        const otherRevs = data.filter(r => r.userId !== 1);
+
+        const myRev = data.find(r => r.userId === user?.id) || null;
+        const otherRevs = data.filter(r => r.userId !== user?.id);
 
         setMyReview(myRev);
         setReviews(otherRevs);
@@ -50,22 +54,23 @@ export default function MovieDetailPage() {
 
     loadMovie();
     loadReviews();
-  }, [movieId]);
+  }, [movieId, user]);
 
   const handleSubmit = async () => {
+    if (!user) return alert("Você precisa estar logado para avaliar.");
     if (rating === 0) return alert("Selecione uma nota!");
 
     try {
       const newReview = await addReview({
         movieId,
-        userId: 1, // Simula usuário atual
-        username: "Você",
+        userId: Number(user.id),
+        username: user.username,
         rating,
         comment,
       });
 
       setMyReview(newReview);
-      setReviews(reviews.filter(r => r.userId !== 1));
+      setReviews(reviews.filter(r => r.userId !== Number(user.id)));
       setRating(0);
       setComment("");
 
@@ -104,16 +109,15 @@ export default function MovieDetailPage() {
         </div>
       </div>
 
-    {movie.trailer && (
-      <div className="max-w-xl">
-        <h2 className="text-2xl font-semibold mb-3">Trailer</h2>
-        <VideoPlayer
-          src={movie.trailer}
-          className="w-full rounded-xl aspect-video"
-        />
-      </div>
-    )}
-
+      {movie.trailer && (
+        <div className="max-w-xl">
+          <h2 className="text-2xl font-semibold mb-3">Trailer</h2>
+          <VideoPlayer
+            src={movie.trailer}
+            className="w-full rounded-xl aspect-video"
+          />
+        </div>
+      )}
 
       {!isAdmin && (
         <div className="bg-gray-100 p-5 md:p-6 rounded-xl space-y-4 max-w-3xl">
@@ -150,8 +154,8 @@ export default function MovieDetailPage() {
               <div className="flex items-center justify-between mb-1">
                 <span className="font-semibold">{r.username || "Usuário"}</span>
                 <span className="text-sm text-gray-500">
-                {r.createdAt ? new Date(r.createdAt).toLocaleDateString() : "—"}
-              </span>
+                  {r.createdAt ? new Date(r.createdAt).toLocaleDateString() : "—"}
+                </span>
               </div>
               <RatingStars value={r.rating} readOnly size={18} />
               <p className="mt-1 text-gray-700 text-sm">{r.comment}</p>
