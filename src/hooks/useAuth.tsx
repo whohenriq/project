@@ -14,6 +14,7 @@ import { User } from "@/types/user";
 interface AuthContextType {
   user: User | null;
   isLoading: boolean;
+  signInWithEmail: () => Promise<void>;
   signOut: () => Promise<void>;
   signInWithGoogle: () => Promise<void>;
 }
@@ -66,6 +67,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       listener?.subscription.unsubscribe();
     };
   }, []);
+
+  const signInWithEmail = useCallback(async () => {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: "valid.email@supabase.io",
+      password: "example-password",
+    });
+  }, []);
+
   const signOut = useCallback(async () => {
     setIsLoading(true);
     await supabase.auth.signOut();
@@ -87,7 +96,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, signOut, isLoading, signInWithGoogle }}
+      value={{ user, signOut, isLoading, signInWithEmail, signInWithGoogle }}
     >
       {children}
     </AuthContext.Provider>
