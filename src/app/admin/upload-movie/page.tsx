@@ -4,11 +4,12 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/text-area";
 import { useRouter } from "next/navigation";
 import { uploadMovie } from "@/services/moviesService";
 import { UploadMovieData } from "@/types/movie";
 import { FileInput } from "@/components/ui/file-input";
-import { Textarea } from "@/components/ui/text-area";
+import { useAuth } from "@/hooks/useAuth";
 
 const genresList = [
   "Ação",
@@ -23,7 +24,6 @@ const genresList = [
 
 export default function UploadMoviePage() {
   const router = useRouter();
-
   const {
     register,
     handleSubmit,
@@ -31,25 +31,28 @@ export default function UploadMoviePage() {
     formState: { errors },
     setValue,
   } = useForm<UploadMovieData & { genre: string[] }>();
+  const { user } = useAuth();
 
   const [posterPreview, setPosterPreview] = useState<string | null>(null);
   const [trailerPreview, setTrailerPreview] = useState<string | null>(null);
 
-  const handlePosterSelect = (file: File) => {
-    setValue("posterFile", file);
-    setPosterPreview(URL.createObjectURL(file));
+  const handlePosterSelect = async (file: File) => {
+    const base64 = await fileToBase64(file);
+    setValue("poster", base64);
+    setPosterPreview(base64);
   };
 
-  const handleTrailerSelect = (file: File) => {
-    setValue("trailerFile", file);
-    setTrailerPreview(URL.createObjectURL(file));
+  const handleTrailerSelect = async (file: File) => {
+    const base64 = await fileToBase64(file);
+    setValue("trailer", base64);
+    setTrailerPreview(base64);
   };
 
   async function onSubmit(data: UploadMovieData & { genre: string[] }) {
     try {
       await uploadMovie({
         ...data,
-        genre: data.genre.join(", "),
+        genre: data.genre,
       });
       alert("Filme salvo com sucesso!");
       reset();
@@ -79,8 +82,6 @@ export default function UploadMoviePage() {
             type="number"
             {...register("year", {
               required: "Ano obrigatório",
-              min: { value: 1900, message: "Ano inválido" },
-              max: { value: new Date().getFullYear(), message: "Ano inválido" },
               valueAsNumber: true,
             })}
           />
@@ -105,23 +106,23 @@ export default function UploadMoviePage() {
           )}
         </div>
 
-        <div className="space-y-2">
+        <div>
           <label className="block font-semibold mb-1">Duração</label>
           <Input
-            {...register("duration", { required: "Duração obrigatória" })}
             type="text"
             placeholder="Ex: 2h 15m"
+            {...register("duration", { required: "Duração obrigatória" })}
           />
           {errors.duration && (
             <p className="text-red-600">{errors.duration.message}</p>
           )}
         </div>
 
-        <div className="space-y-2">
+        <div>
           <label className="block font-semibold mb-1">Descrição</label>
           <Textarea
-            {...register("description", { required: "Descrição obrigatória" })}
             rows={5}
+            {...register("description", { required: "Descrição obrigatória" })}
           />
           {errors.description && (
             <p className="text-red-600">{errors.description.message}</p>
@@ -146,7 +147,6 @@ export default function UploadMoviePage() {
           accept="video/*"
           onFileSelect={handleTrailerSelect}
         />
-
         {trailerPreview && (
           <video
             src={trailerPreview}
@@ -161,4 +161,13 @@ export default function UploadMoviePage() {
       </form>
     </div>
   );
+}
+
+function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (err) => reject(err);
+    reader.readAsDataURL(file);
+  });
 }

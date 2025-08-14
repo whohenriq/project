@@ -1,8 +1,8 @@
 export interface Review {
-  id: string;
-  movieId: string;
-  userId?: string;
-  username?: string; // só pra exibir
+  id: number;
+  movieId: number;
+  userId?: number;
+  username?: string;
   rating: number;
   comment: string;
   createdAt?: string;

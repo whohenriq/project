@@ -5,8 +5,8 @@ import { useState, useEffect } from "react";
 import { MovieCard } from "@/components/movie-card";
 import { Button } from "@/components/ui/button";
 import { Movie } from "@/types/movie";
-import { mockMovies } from "@/mocks/mockMovies";
-import { supabase } from "@/lib/supabaseClient";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function MoviesListPage() {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -16,32 +16,21 @@ export default function MoviesListPage() {
   useEffect(() => {
     async function loadMovies() {
       try {
-        const { data, error } = await supabase
-          .from("movies")
-          .select("*")
-          .order("title", { ascending: true });
+        const res = await fetch(`${API_URL}/movies`);
+        if (!res.ok) throw new Error("Erro ao buscar filmes");
+        const data: Movie[] = await res.json();
 
-        if (error) throw error;
 
-        if (data && data.length > 0) {
-          const moviesFromDB: Movie[] = data.map((m: any) => ({
-            id: m.id,
-            title: m.title,
-            description: m.description,
-            genre: Array.isArray(m.genre) ? m.genre : [m.genre || ""],
-            posterUrl: m.poster_url,
-            trailerUrl: m.trailer_url,
-            averageRating: m.average_rating || 0,
-          }));
-          setMovies(moviesFromDB);
-        } else {
-          setMovies(mockMovies);
-        }
-      } catch {
-        setMovies(mockMovies);
+        const moviesFromAPI = data.map((m) => ({
+          ...m,
+          genre: Array.isArray(m.genre) ? m.genre : [m.genre || ""],
+        }));
+
+        setMovies(moviesFromAPI);
+        setIsAdmin(true);
+      } catch (err) {
+        console.error("Erro ao carregar filmes:", err);
       }
-
-      setIsAdmin(true);
     }
 
     loadMovies();

@@ -1,86 +1,75 @@
-import { supabase } from "@/lib/supabaseClient";
-import { Movie } from "@/types/movie";
 import { Review } from "@/types/review";
+import { Movie } from "@/types/movie";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function addReview(review: Omit<Review, "id" | "createdAt">) {
-  const { data, error } = await supabase
-    .from("reviews")
-    .insert([{ ...review }])
-    .select("*")
-    .single();
+  const res = await fetch(`${API_URL}/reviews`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      ...review,
+      createdAt: new Date().toISOString(),
+    }),
+  });
 
-  if (error) throw error;
-  return data as Review;
+  if (!res.ok) throw new Error("Erro ao adicionar review");
+  return res.json() as Promise<Review>;
 }
 
-export async function getReviewsByMovie(movieId: string) {
-  const { data, error } = await supabase
-    .from("reviews")
-    .select("*")
-    .eq("movie_id", movieId)
-    .order("created_at", { ascending: false });
-
-  if (error) throw error;
-  return data as Review[];
+export async function getReviewsByMovie(movieId: number) {
+  const res = await fetch(
+    `${API_URL}/reviews?movieId=${movieId}&_sort=createdAt&_order=desc`
+  );
+  if (!res.ok) throw new Error("Erro ao buscar reviews");
+  return res.json() as Promise<Review[]>;
 }
 
-// Atualizar rating médio e contagem do filme
-export async function updateMovieRating(movieId: string) {
-  const { data: reviews, error } = await supabase
-    .from("reviews")
-    .select("rating")
-    .eq("movie_id", movieId);
+export async function updateMovieRating(movieId: number) {
+  const reviewsRes = await fetch(`${API_URL}/reviews?movieId=${movieId}`);
+  if (!reviewsRes.ok) throw new Error("Erro ao buscar reviews para cálculo");
 
-  if (error) throw error;
-
-  const votesCount = reviews?.length || 0;
+  const reviews = (await reviewsRes.json()) as Review[];
+  const votesCount = reviews.length;
   const averageRating =
     votesCount > 0
-      ? reviews!.reduce((acc, r) => acc + r.rating, 0) / votesCount
+      ? reviews.reduce((acc, r) => acc + r.rating, 0) / votesCount
       : 0;
 
-  const { error: updateError } = await supabase
-    .from("movies")
-    .update({ votes_count: votesCount, average_rating: averageRating })
-    .eq("id", movieId);
+  const movieUpdateRes = await fetch(`${API_URL}/movies/${movieId}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      rating: averageRating,
+      votes_count: votesCount,
+    }),
+  });
 
-  if (updateError) throw updateError;
+  if (!movieUpdateRes.ok) throw new Error("Erro ao atualizar filme");
 
   return { votesCount, averageRating };
 }
 
-export async function getMyReviews(userId: string) {
-  const { data, error } = await supabase
-    .from("reviews")
-    .select(
-      `
-      rating,
-      comment,
-      created_at,
-      movie:movies (
-        id,
-        title,
-        description,
-        genre,
-        poster_url,
-        trailer_url
-      )
-    `
-    )
-    .eq("user_id", userId)
-    .order("created_at", { ascending: false });
+export async function getMyReviews(userId: number) {
+  const res = await fetch(
+    `${API_URL}/reviews?userId=${userId}&_sort=createdAt&_order=desc`
+  );
+  if (!res.ok) throw new Error("Erro ao buscar reviews do usuário");
 
-  if (error) throw error;
+  const reviews = (await res.json()) as Review[];
 
-  return (data || []).map((r: any) => ({
-    id: r.movie.id,
-    title: r.movie.title,
-    description: r.movie.description,
-    genre: Array.isArray(r.movie.genre) ? r.movie.genre : [r.movie.genre || ""],
-    posterUrl: r.movie.poster_url,
-    trailerUrl: r.movie.trailer_url,
-    averageRating: r.rating,
-    comment: r.comment,
-    createdAt: r.created_at,
-  })) as (Movie & { comment: string; createdAt: string })[];
+  const moviesRes = await fetch(`${API_URL}/movies`);
+  if (!moviesRes.ok) throw new Error("Erro ao buscar filmes");
+
+  const movies = (await moviesRes.json()) as Movie[];
+
+  return reviews.map((r) => {
+    const movie = movies.find((m) => m.id === r.movieId)!;
+    return {
+      ...movie,
+      comment: r.comment,
+      createdAt: r.createdAt,
+      averageRating: r.rating,
+    };
+  });
 }
